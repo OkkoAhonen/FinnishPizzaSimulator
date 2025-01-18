@@ -7,6 +7,7 @@ public class MuttiGenerator : MonoBehaviour
     public DragWithKey dragWithKeydragWithKey;
     public LayerMask pizzaLayer; // LayerMask tarkistaa "pizza"-kerroksen
     public bool mouseDown = false;
+    public Transform pizzaObject; // Referenssi Pizza-objektiin, johon prefabit lis‰t‰‰n
 
     void Start()
     {
@@ -16,6 +17,9 @@ public class MuttiGenerator : MonoBehaviour
 
     void Update()
     {
+        // P‰ivitet‰‰n Dragging-arvo joka frame
+        Dragging = dragWithKeydragWithKey.isDragging;
+
         // Tarkistetaan, onko hiiren vasen nappi painettuna
         if (Input.GetMouseButtonDown(0))
         {
@@ -26,8 +30,6 @@ public class MuttiGenerator : MonoBehaviour
         {
             mouseDown = false; // Pys‰ytet‰‰n hiiren painallus
         }
-
-        Dragging = dragWithKeydragWithKey.isDragging;
 
         if (mouseDown && Dragging)
         {
@@ -44,8 +46,12 @@ public class MuttiGenerator : MonoBehaviour
     {
         if (prefab != null)
         {
-            // Luo uusi prefab hiiren sijaintiin
-            Instantiate(prefab, position, Quaternion.identity);
+            // Luo uusi prefab hiiren sijaintiin ja lis‰‰ se pizza-objektiin
+            GameObject newPrefab = Instantiate(prefab, position, Quaternion.identity);
+            if (pizzaObject != null)
+            {
+                newPrefab.transform.SetParent(pizzaObject); // Asetetaan prefab pizza-objektin lapseksi
+            }
         }
         else
         {
