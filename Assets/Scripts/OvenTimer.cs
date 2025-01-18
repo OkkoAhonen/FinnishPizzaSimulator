@@ -5,10 +5,10 @@ using UnityEngine.UI;
 
 public class OvenTimer : MonoBehaviour
 {
-    public GameObject bar;
     public float maxValue = 10.0f;
     public float targetTime = 10.0f;
-    public AudioClip sfx;
+    public AudioClip beep;
+    public AudioClip ovenSound;
     private AudioSource ovenAudio;
 
     [SerializeField] private Bar timeBar;
@@ -17,6 +17,8 @@ public class OvenTimer : MonoBehaviour
     private void Awake()
     {
         ovenAudio = GetComponent<AudioSource>();
+
+        oven();
     }
 
     // Update is called once per frame
@@ -25,14 +27,21 @@ public class OvenTimer : MonoBehaviour
         targetTime -= Time.deltaTime; // Oven timer: X sec - 1sec
         timeBar.UpdateTimer(targetTime, maxValue);
 
-        if (targetTime <= 0.0f)
+        /*if (targetTime <= 0.0f)
         {
-            timerEnded();
-        }
+            ovenAudio.Stop();
+            //timerEnded();
+        }*/
     }
 
-    public void timerEnded()
+    public void oven()
     {
-        ovenAudio.PlayOneShot(sfx, 1.0f); // Plays beep sound when pizza is ready
+        ovenAudio.PlayOneShot(ovenSound, 5.0f);
+
     }
+
+    /*public void timerEnded()
+    {
+        ovenAudio.PlayOneShot(beep); // Plays beep sound when pizza is ready
+    }*/
 }
