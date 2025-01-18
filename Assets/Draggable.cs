@@ -2,12 +2,32 @@ using UnityEngine;
 
 public class DragWithKey : MonoBehaviour
 {
-    private bool isDragging = false; // Tila, onko vet‰minen k‰ynniss‰
+    public bool isDragging = false; // Tila, onko vet‰minen k‰ynniss‰
     private Vector3 offset; // Et‰isyys objektin ja hiiren v‰lill‰
     private bool isMouseOver = false; // Onko hiiri objektin p‰‰ll‰
+    private Vector3 originalPosition; // Tallennetaan alkuper‰inen sijainti
+
+    public MuttiGenerator muttiGenerator;
+
+    private void Start()
+    {
+        muttiGenerator = GetComponent<MuttiGenerator>();
+        originalPosition = transform.position; // Tallenna alkuper‰inen sijainti
+    }
 
     void Update()
     {
+        Tilt25();
+        if (isMouseOver)
+        {
+            
+        }
+
+        if (!isDragging)
+        {
+            muttiGenerator.mouseDown = false;
+        }
+
         // Tarkista, painetaanko E-n‰pp‰int‰
         if (Input.GetKeyDown(KeyCode.E) && isMouseOver)
         {
@@ -39,6 +59,9 @@ public class DragWithKey : MonoBehaviour
     private void StopDragging()
     {
         isDragging = false;
+
+        // Palauta alkuper‰inen sijainti, kun vet‰minen lopetetaan
+        transform.position = originalPosition;
     }
 
     private void DragObject()
@@ -65,5 +88,19 @@ public class DragWithKey : MonoBehaviour
     private void OnMouseExit()
     {
         isMouseOver = false;
+    }
+
+    private void Tilt25()
+    {
+        if (muttiGenerator.mouseDown)
+        {
+            // Aseta rotaatio 25 astetta Z-akselilla
+            transform.rotation = Quaternion.Euler(0, 0, 25);
+        }
+        else if (!isDragging)
+        {
+            transform.rotation = Quaternion.identity;
+        }
+        else { transform.rotation = Quaternion.identity; }
     }
 }
